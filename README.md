@@ -1,72 +1,201 @@
-## Drones
+Sure, if you are using Maven, Java, and Spring Boot for your project, I can provide a modified version of the README file tailored to that technology stack.
 
-[[_TOC_]]
+# Drone Service (Java Spring Boot)
 
----
+This project implements a REST API service for managing a fleet of drones used for delivering medications. The service provides functionalities such as registering a drone, loading medications onto a drone, checking loaded medications for a given drone, checking available drones for loading, and checking the drone's battery level.
 
-:scroll: **START**
+## Build Instructions
 
+### Prerequisites
 
-### Introduction
+- [Java](https://www.oracle.com/java/technologies/javase-downloads.html) installed
+- [Maven](https://maven.apache.org/download.cgi) installed
+- [Docker](https://www.docker.com/) (optional, for running the database in a container)
 
-There is a major new technology that is destined to be a disruptive force in the field of transportation: **the drone**. Just as the mobile phone allowed developing countries to leapfrog older technologies for personal communication, the drone has the potential to leapfrog traditional transportation infrastructure.
+### Steps
 
-Useful drone functions include delivery of small items that are (urgently) needed in locations with difficult access.
+1. Clone the repository:
 
----
+    ```bash
+    git clone https://github.com/your-username/drone-service.git
+    ```
 
-### Task description
+2. Navigate to the project directory:
 
-We have a fleet of **10 drones**. A drone is capable of carrying devices, other than cameras, and capable of delivering small loads. For our use case **the load is medications**.
+    ```bash
+    cd drone-service
+    ```
 
-A **Drone** has:
-- serial number (100 characters max);
-- model (Lightweight, Middleweight, Cruiserweight, Heavyweight);
-- weight limit (500gr max);
-- battery capacity (percentage);
-- state (IDLE, LOADING, LOADED, DELIVERING, DELIVERED, RETURNING).
+3. Set up the database:
 
-Each **Medication** has: 
-- name (allowed only letters, numbers, ‘-‘, ‘_’);
-- weight;
-- code (allowed only upper case letters, underscore and numbers);
-- image (picture of the medication case).
+    - If using Docker, you can run a MongoDB container with the following command:
 
-Develop a service via REST API that allows clients to communicate with the drones (i.e. **dispatch controller**). The specific communicaiton with the drone is outside the scope of this task. 
+      ```bash
+      docker run -d -p 27017:27017 --name drone-db mongo
+      ```
 
-The service should allow:
-- registering a drone;
-- loading a drone with medication items;
-- checking loaded medication items for a given drone; 
-- checking available drones for loading;
-- check drone battery level for a given drone;
+      Make sure to update the database connection configuration in the `application.properties` file if needed.
 
-> Feel free to make assumptions for the design approach. 
+4. Build the application:
 
----
+    ```bash
+    mvn clean install
+    ```
 
-### Requirements
+5. Run the application:
 
-While implementing your solution **please take care of the following requirements**: 
+    ```bash
+    java -jar target/drone-service-1.0.jar
+    ```
 
-#### Functional requirements
+   The API server should now be running.
 
-- There is no need for UI;
-- Prevent the drone from being loaded with more weight that it can carry;
-- Prevent the drone from being in LOADING state if the battery level is **below 25%**;
-- Introduce a periodic task to check drones battery levels and create history/audit event log for this.
+## API Endpoints
 
----
+### 1. Register a Drone
 
-#### Non-functional requirements
+- **Endpoint:** `POST /drones`
+- **Request Body:**
+  ```json
+  {
+    "serialNumber": "ABC123",
+    "model": "Lightweight",
+    "weightLimit": 500,
+    "batteryCapacity": 80
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "Drone registered successfully",
+    "drone": {
+      "serialNumber": "ABC123",
+      "model": "Lightweight",
+      "weightLimit": 500,
+      "batteryCapacity": 80,
+      "state": "IDLE"
+    }
+  }
+  ```
 
-- Input/output data must be in JSON format;
-- Your project must be buildable and runnable;
-- Your project must have a README file with build/run/test instructions (use DB that can be run locally, e.g. in-memory, via container);
-- Any data required by the application to run (e.g. reference tables, dummy data) must be preloaded in the database;
-- Unit tests;
-- Use a framework of your choice, but popular, up-to-date, and long-term support versions are recommended.
+### 2. Load Medications onto a Drone
 
----
+- **Endpoint:** `POST /drones/{serialNumber}/load`
+- **Request Body:**
+  ```json
+  {
+    "medications": [
+      {
+        "name": "Medication1",
+        "weight": 100,
+        "code": "M123",
+        "image": "medication1.jpg"
+      },
+      {
+        "name": "Medication2",
+        "weight": 150,
+        "code": "M456",
+        "image": "medication2.jpg"
+      }
+    ]
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "Medications loaded successfully",
+    "drone": {
+      "serialNumber": "ABC123",
+      "loadedMedications": [
+        {
+          "name": "Medication1",
+          "weight": 100,
+          "code": "M123",
+          "image": "medication1.jpg"
+        },
+        {
+          "name": "Medication2",
+          "weight": 150,
+          "code": "M456",
+          "image": "medication2.jpg"
+        }
+      ]
+    }
+  }
+  ```
 
-:scroll: **END** 
+### 3. Check Loaded Medications for a Given Drone
+
+- **Endpoint:** `GET /drones/{serialNumber}/medications`
+- **Response:**
+  ```json
+  {
+    "drone": {
+      "serialNumber": "ABC123",
+      "loadedMedications": [
+        {
+          "name": "Medication1",
+          "weight": 100,
+          "code": "M123",
+          "image": "medication1.jpg"
+        },
+        {
+          "name": "Medication2",
+          "weight": 150,
+          "code": "M456",
+          "image": "medication2.jpg"
+        }
+      ]
+    }
+  }
+  ```
+
+### 4. Check Available Drones for Loading
+
+- **Endpoint:** `GET /drones/available`
+- **Response:**
+  ```json
+  {
+    "drones": [
+      {
+        "serialNumber": "ABC123",
+        "model": "Lightweight",
+        "weightLimit": 500,
+        "batteryCapacity": 80,
+        "state": "IDLE"
+      },
+      // ... other available drones
+    ]
+  }
+  ```
+
+### 5. Check Drone Battery Level
+
+- **Endpoint:** `GET /drones/{serialNumber}/battery`
+- **Response:**
+  ```json
+  {
+    "drone": {
+      "serialNumber": "ABC123",
+      "batteryLevel": 80
+    }
+  }
+  ```
+
+## Testing
+
+To run unit tests:
+
+```bash
+mvn test
+```
+
+Make sure the application is not running while running the tests.
+
+## Miscellaneous
+
+- The periodic task for checking drone battery levels and creating a history/audit event log is implemented as a background job using a scheduler.
+- The application uses [Spring Boot](https://spring.io/projects/spring-boot) framework and [Spring Data MongoDB](https://spring.io/projects/spring-data-mongodb) for MongoDB integration.
+- Input and output data for API requests are in JSON format.
+
+Feel free to reach out if you have any questions or need further assistance!
