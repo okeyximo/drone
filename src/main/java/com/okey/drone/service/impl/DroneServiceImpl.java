@@ -16,11 +16,11 @@ import com.okey.drone.service.DroneService;
 import com.okey.drone.utils.DroneMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -70,9 +70,17 @@ public class DroneServiceImpl implements DroneService {
                 .build();
     }
 
+    @Scheduled(fixedRate = 3600000)
+    public void checkBatteryLevels() {
+        List<Drone> drones = droneRepository.findAll();
 
+        for (Drone drone : drones) {
+            int batteryLevel = drone.getBatteryCapacity();
+            log.info("Drone with serial number {} battery level is {}", drone.getSerialNumber(), batteryLevel);
+        }
+    }
 
-    @Override
+            @Override
     @Transactional
     public List<MedicationResponse> getLoadedMedications(String droneSerialNumber) {
         var drone = droneRepository.findBySerialNumber(droneSerialNumber).orElseThrow(()-> new ResourceNotFoundException("Drone not found"));

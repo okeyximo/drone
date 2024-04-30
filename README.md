@@ -14,35 +14,20 @@ This project implements a REST API service for managing a fleet of drones used f
 
 ### Steps
 
-1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/your-username/drone-service.git
-    ```
-
-2. Navigate to the project directory:
+1. Navigate to the project directory:
 
     ```bash
     cd drone-service
     ```
-
-3. Set up the database:
-
-    - If using Docker, you can run a MongoDB container with the following command:
-
-      ```bash
-      docker run -d -p 27017:27017 --name drone-db mongo
-      ```
-
-      Make sure to update the database connection configuration in the `application.properties` file if needed.
-
-4. Build the application:
+   
+2. Build the application:
 
     ```bash
     mvn clean install
     ```
 
-5. Run the application:
+3. Run the application:
 
     ```bash
     java -jar target/drone-service-1.0.jar
@@ -195,7 +180,7 @@ Make sure the application is not running while running the tests.
 ## Miscellaneous
 
 - The periodic task for checking drone battery levels and creating a history/audit event log is implemented as a background job using a scheduler.
-- The application uses [Spring Boot](https://spring.io/projects/spring-boot) framework and [Spring Data MongoDB](https://spring.io/projects/spring-data-mongodb) for MongoDB integration.
+- The application uses [Spring Boot](https://spring.io/projects/spring-boot) framework and H2 in-memory database for testing.
 - Input and output data for API requests are in JSON format.
 
 Feel free to reach out if you have any questions or need further assistance!
