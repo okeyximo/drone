@@ -1,5 +1,3 @@
-Sure, if you are using Maven, Java, and Spring Boot for your project, I can provide a modified version of the README file tailored to that technology stack.
-
 # Drone Service (Java Spring Boot)
 
 This project implements a REST API service for managing a fleet of boxes used for delivering item. The service provides functionalities such as registering a box, loading item onto a box, checking loaded item for a given box, checking available boxes for loading, and checking the box's battery level.
@@ -18,7 +16,7 @@ This project implements a REST API service for managing a fleet of boxes used fo
 1. Navigate to the project directory:
 
     ```bash
-    cd box-service
+    cd drone
     ```
    
 2. Build the application:
