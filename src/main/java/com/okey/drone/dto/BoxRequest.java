@@ -1,21 +1,25 @@
 package com.okey.drone.dto;
 
-import com.okey.drone.entity.DroneState;
+import com.okey.drone.entity.BoxState;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.UUID;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-public class DroneRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class BoxRequest {
 
     @NotBlank(message = "Serial number is required")
-    private String serialNumber;
+    @Size(max = 10, message = "TxRef cannot exceed 10 characters")
+    private String txRef;
 
     @NotBlank(message = "Model is required")
     @Pattern(regexp = "Lightweight|Middleweight|Cruiserweight|Heavyweight", message = "Invalid model. Must be one of: Lightweight, Middleweight, Cruiserweight, Heavyweight")
@@ -28,6 +32,6 @@ public class DroneRequest {
     @Max(value = 100, message = "Battery capacity cannot exceed 100%")
     private int batteryCapacity;
 
-    private DroneState state;
+    private BoxState state;
 
 }

@@ -1,10 +1,10 @@
 package com.okey.drone.utils;
 
-import com.okey.drone.dto.DroneRequest;
-import com.okey.drone.dto.DroneResponse;
-import com.okey.drone.dto.MedicationResponse;
-import com.okey.drone.entity.Drone;
-import com.okey.drone.entity.DroneState;
+import com.okey.drone.dto.BoxRequest;
+import com.okey.drone.dto.BoxResponse;
+import com.okey.drone.dto.ItemResponse;
+import com.okey.drone.entity.Box;
+import com.okey.drone.entity.BoxState;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;
@@ -12,36 +12,36 @@ import java.util.UUID;
 @UtilityClass
 public class TestData {
 
-    public DroneRequest getDroneRequest() {
-        return DroneRequest.builder()
+    public BoxRequest getDroneRequest() {
+        return BoxRequest.builder()
                 .model("Test Drone")
                 .weightLimit(100)
                 .batteryCapacity(100)
-                .state(DroneState.IDLE)
+                .state(BoxState.IDLE)
                 .build();
     }
 
-    public Drone getDrone() {
-        return Drone.builder()
+    public Box getDrone() {
+        return Box.builder()
                 .model("Test Drone")
-                .serialNumber(UUID.randomUUID().toString())
+                .txRef(UUID.randomUUID().toString())
                 .weightLimit(100)
                 .batteryCapacity(100)
-                .state(DroneState.IDLE)
+                .state(BoxState.IDLE)
                 .build();
     }
 
-    public DroneResponse getDroneResponse(Drone drone) {
-        return DroneResponse.builder()
-                .serialNumber(drone.getSerialNumber())
-                .weightLimit(drone.getWeightLimit())
-                .state(drone.getState())
-                .batteryCapacity(drone.getBatteryCapacity())
+    public BoxResponse getDroneResponse(Box box) {
+        return BoxResponse.builder()
+                .txRef(box.getTxRef())
+                .weightLimit(box.getWeightLimit())
+                .state(box.getState())
+                .batteryCapacity(box.getBatteryCapacity())
                 .build();
     }
 
-    public static MedicationResponse getMedicationResponse(long l) {
-        return MedicationResponse.builder()
+    public static ItemResponse getMedicationResponse(long l) {
+        return ItemResponse.builder()
                 .name("Medication " + l)
                 .weight(10.0)
                 .build();

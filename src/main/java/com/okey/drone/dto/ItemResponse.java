@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MedicationResponse {
+public class ItemResponse {
     private String name;
     private Double weight;
     private String code;

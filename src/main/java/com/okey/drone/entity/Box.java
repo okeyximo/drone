@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Builder
@@ -24,34 +23,34 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Drone {
+public class Box {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String serialNumber;
+    @Column(unique = true, nullable = false, length = 20)
+    private String txRef;
     private String model;
     private double weightLimit;
     private int batteryCapacity;
     @Enumerated(EnumType.STRING)
-    private DroneState state;
+    private BoxState state;
 
-    @OneToMany(mappedBy = "drone", cascade = CascadeType.ALL)
-    private List<Medication> loadedMedications;
+    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
+    private List<Item> loadedItems;
 
 
-    public void setLoadedMedications(List<Medication> droneMedications) {
-        if (this.loadedMedications == null) {
-            this.loadedMedications = droneMedications;
+    public void setLoadedItems(List<Item> droneItems) {
+        if (this.loadedItems == null) {
+            this.loadedItems = droneItems;
         } else {
-            this.loadedMedications.addAll(droneMedications);
+            this.loadedItems.addAll(droneItems);
         }
     }
 
-    public void setState(DroneState droneState) {
-        this.state = droneState;
+    public void setState(BoxState boxState) {
+        this.state = boxState;
     }
 }
 

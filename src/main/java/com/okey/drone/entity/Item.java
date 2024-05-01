@@ -1,6 +1,5 @@
 package com.okey.drone.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +19,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class Medication {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -29,11 +28,10 @@ public class Medication {
     private String name;
     private double weight;
     private String code;
-    private String image;
 
     @ManyToOne
     @JoinColumn(name = "drone_id")
-    private Drone drone;
+    private Box box;
 
 
 }

@@ -2,7 +2,7 @@ Sure, if you are using Maven, Java, and Spring Boot for your project, I can prov
 
 # Drone Service (Java Spring Boot)
 
-This project implements a REST API service for managing a fleet of drones used for delivering medications. The service provides functionalities such as registering a drone, loading medications onto a drone, checking loaded medications for a given drone, checking available drones for loading, and checking the drone's battery level.
+This project implements a REST API service for managing a fleet of boxes used for delivering item. The service provides functionalities such as registering a box, loading item onto a box, checking loaded item for a given box, checking available boxes for loading, and checking the box's battery level.
 
 ## Build Instructions
 
@@ -18,7 +18,7 @@ This project implements a REST API service for managing a fleet of drones used f
 1. Navigate to the project directory:
 
     ```bash
-    cd drone-service
+    cd box-service
     ```
    
 2. Build the application:
@@ -30,20 +30,20 @@ This project implements a REST API service for managing a fleet of drones used f
 3. Run the application:
 
     ```bash
-    java -jar target/drone-service-1.0.jar
+    java -jar target/box-service-1.0.jar
     ```
 
    The API server should now be running.
 
 ## API Endpoints
 
-### 1. Register a Drone
+### 1. Register a Box
 
-- **Endpoint:** `POST /drones`
+- **Endpoint:** `POST /boxes`
 - **Request Body:**
   ```json
   {
-    "serialNumber": "ABC123",
+    "txRef": "ABC123",
     "model": "Lightweight",
     "weightLimit": 500,
     "batteryCapacity": 80
@@ -52,9 +52,9 @@ This project implements a REST API service for managing a fleet of drones used f
 - **Response:**
   ```json
   {
-    "message": "Drone registered successfully",
-    "drone": {
-      "serialNumber": "ABC123",
+    "message": "Box registered successfully",
+    "box": {
+      "txRef": "ABC123",
       "model": "Lightweight",
       "weightLimit": 500,
       "batteryCapacity": 80,
@@ -63,24 +63,24 @@ This project implements a REST API service for managing a fleet of drones used f
   }
   ```
 
-### 2. Load Medications onto a Drone
+### 2. Load Item onto a Box
 
-- **Endpoint:** `POST /drones/{serialNumber}/load`
+- **Endpoint:** `POST /boxes/{txRef}/load`
 - **Request Body:**
   ```json
   {
-    "medications": [
+    "item": [
       {
         "name": "Medication1",
         "weight": 100,
         "code": "M123",
-        "image": "medication1.jpg"
+        "image": "item1.jpg"
       },
       {
         "name": "Medication2",
         "weight": 150,
         "code": "M456",
-        "image": "medication2.jpg"
+        "image": "item2.jpg"
       }
     ]
   }
@@ -88,80 +88,80 @@ This project implements a REST API service for managing a fleet of drones used f
 - **Response:**
   ```json
   {
-    "message": "Medications loaded successfully",
-    "drone": {
-      "serialNumber": "ABC123",
-      "loadedMedications": [
+    "message": "Item loaded successfully",
+    "box": {
+      "txRef": "ABC123",
+      "loadedItems": [
         {
           "name": "Medication1",
           "weight": 100,
           "code": "M123",
-          "image": "medication1.jpg"
+          "image": "item1.jpg"
         },
         {
           "name": "Medication2",
           "weight": 150,
           "code": "M456",
-          "image": "medication2.jpg"
+          "image": "item2.jpg"
         }
       ]
     }
   }
   ```
 
-### 3. Check Loaded Medications for a Given Drone
+### 3. Check Loaded Items for a Given Box
 
-- **Endpoint:** `GET /drones/{serialNumber}/medications`
+- **Endpoint:** `GET /boxes/{txRef}/item`
 - **Response:**
   ```json
   {
-    "drone": {
-      "serialNumber": "ABC123",
-      "loadedMedications": [
+    "box": {
+      "txRef": "ABC123",
+      "loadedItems": [
         {
           "name": "Medication1",
           "weight": 100,
           "code": "M123",
-          "image": "medication1.jpg"
+          "image": "item1.jpg"
         },
         {
           "name": "Medication2",
           "weight": 150,
           "code": "M456",
-          "image": "medication2.jpg"
+          "image": "item2.jpg"
         }
       ]
     }
   }
   ```
 
-### 4. Check Available Drones for Loading
+### 4. Check Available Boxs for Loading
 
-- **Endpoint:** `GET /drones/available`
+- **Endpoint:** `GET /boxes/available`
 - **Response:**
   ```json
   {
-    "drones": [
+    "boxes": [
       {
-        "serialNumber": "ABC123",
+        "txRef": "ABC123",
         "model": "Lightweight",
         "weightLimit": 500,
         "batteryCapacity": 80,
         "state": "IDLE"
       },
-      // ... other available drones
+      // ... other available boxes
     ]
   }
   ```
 
-### 5. Check Drone Battery Level
+### 5. Check Box Battery Level
 
-- **Endpoint:** `GET /drones/{serialNumber}/battery`
+- **Endpoint:** `GET /boxes/{txRef}/battery`
 - **Response:**
   ```json
   {
-    "drone": {
-      "serialNumber": "ABC123",
+    "box": {
+      "txRef": "ABC123",
       "batteryLevel": 80
     }
   }
@@ -179,7 +179,6 @@ Make sure the application is not running while running the tests.
 
 ## Miscellaneous
 
-- The periodic task for checking drone battery levels and creating a history/audit event log is implemented as a background job using a scheduler.
 - The application uses [Spring Boot](https://spring.io/projects/spring-boot) framework and H2 in-memory database for testing.
 - Input and output data for API requests are in JSON format.
 
